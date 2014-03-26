@@ -1,5 +1,5 @@
 -module(bomberman).
--export([player/3, recv/3, right/1, left/1, down/1, up/1, coords/1, board/1, cell/3]).
+-export([player/3, recv/3, bomb/1, right/1, left/1, down/1, up/1, coords/1, board/1, cell/3]).
 
 cell(Board, X, Y) ->
     {Celllist} = lists:nth(Y+1, lists:nth(X+1, Board)),
@@ -12,6 +12,10 @@ board(Json) ->
 coords(Json) ->
     {proplists:get_value(<<"X">>, Json),
      proplists:get_value(<<"Y">>, Json)}.
+
+bomb(Sock) ->
+    gen_tcp:send(Sock, "bomb\n"),
+    "bomb\n".
 
 right(Sock) ->
     gen_tcp:send(Sock, "right\n"),
