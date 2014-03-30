@@ -13,6 +13,9 @@ coords(Json) ->
     {proplists:get_value(<<"X">>, Json),
      proplists:get_value(<<"Y">>, Json)}.
 
+radius(Json) ->
+    proplists:get_value(<<"MaxRadius">>, Json).
+
 bomb(Sock) ->
     gen_tcp:send(Sock, "bomb\n"),
     "bomb\n".
