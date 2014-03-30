@@ -44,8 +44,10 @@ recv(Sock, Client, Bins) ->
 		1 ->
 		    if
 			Lastbyte =:= 10 ->
-			    case jiffy:decode(lists:nth(1, Binlist)) of
+			    try jiffy:decode(lists:nth(1, Binlist)) of
 				{Json} -> Client ! {ok, Json}
+			    catch {error, {_, truncated_json}} ->
+				    recv(Sock, Client, lists:nth(1, Binlist))
 			    end,
 			    recv(Sock, Client, <<>>);
 			true ->
@@ -63,7 +65,7 @@ recv(Sock, Client, Bins) ->
 				true ->
 				    recv(Sock, Client, Restofbinlist)
 			    end
-		    catch truncated_json ->
+		    catch {error, {_, truncated_json}} ->
 			    recv(Sock, Client, <<Firstofbinlist/binary, Restofbinlist/binary>>)
 		    end
 	    end;

@@ -7,8 +7,7 @@ move(Sock) ->
 	{ok, Json} ->
 	    {X, Y} = bomberman:coords(Json),
 	    Board = bomberman:board(Json),
-	    io:fwrite(bomberman:cell(Board, X, Y)),
-	    io:fwrite("\n"),
+	    Cell = bomberman:cell(Board, X, Y),
 	    Pick = random:uniform(4),
 	    if
 		Pick =:= 1 -> bomberman:up(Sock);
